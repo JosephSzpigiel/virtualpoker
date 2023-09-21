@@ -6,7 +6,10 @@ const betForm = document.querySelector('#bet-form')
 
 const cardsDivs = document.querySelectorAll('.card')
 const draw = document.querySelector('#draw')
-const redraw =document.querySelector('#redraw')
+const redraw = document.querySelector('#redraw')
+const discardIndicator = document.createElement('p')
+discardIndicator.className = "discard"
+discardIndicator.textContent = 'Discard'
 
 function unshade(e){
     e.target.style.opacity= '100%'
@@ -20,10 +23,12 @@ function selectByClick(e){
         e.target.style.opacity= '40%'
         e.target.removeEventListener('mouseover', shade)
         e.target.removeEventListener('mouseleave', unshade)
+        e.target.parentNode.append(discardIndicator)
     }else{
         e.target.style.opacity = '50%'
         e.target.addEventListener('mouseover', shade)
         e.target.addEventListener('mouseleave', unshade)
+        e.target.parentNode.querySelector('.discard').remove()
     }
 }
 
@@ -112,10 +117,23 @@ redraw.addEventListener('click', (e) =>{
 })
 
 function findPairs(cardsArray){
+    let hasPairs = false
+    let pairCard = ''
     cardsArray.forEach((card, index) =>{
         const cardsArray2 = cardsArray.filter((otherCard,otherIndex)=>{
             return index !== otherIndex
         })
+        console.log(cardsArray2)
+        cardsArray2.forEach((secondCard)=>{
+            if((card[0] === secondCard[0])){
+                hasPairs = true
+                pairCard = card[0]
+            }
+        })
     })
-        
+    return [hasPairs, pairCard]
+}
+
+function findThree(cardsArray,findPairsArray){
+    let hasThree = false
 }
