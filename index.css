@@ -16,9 +16,6 @@
     max-width: 100%;  
     height: auto;  
 }
-.shaded {
-    opacity: 50%;
-}
 #game-name{
     text-align: center;
 }

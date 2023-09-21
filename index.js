@@ -1,7 +1,8 @@
 let deckId = 0
 const currentTokens = document.querySelector('#tokens span')
 console.log(currentTokens)
-let bet = 1
+let currentBet = 1
+const betForm = document.querySelector('#bet-form')
 
 const cardsDivs = document.querySelectorAll('.card')
 const draw = document.querySelector('#draw')
@@ -33,7 +34,8 @@ for (card of cardsDivs){
     card.append(cardImage)
 }
 
-draw.addEventListener('click',(e)=>{
+betForm.addEventListener('submit',(e)=>{
+    e.preventDefault()
     fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     .then(r => r.json())
     .then(info => {
@@ -41,10 +43,13 @@ draw.addEventListener('click',(e)=>{
         fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=5`)
         .then(r => r.json())
         .then(data => {
-            newTokens = currentTokens.textContent - bet
+            currentBet = e.target.bet.value
+            console.log(e.target.bet.value)
+            newTokens = currentTokens.textContent - currentBet
             currentTokens.textContent = newTokens
             redraw.disabled = false
-            draw.disabled = true
+            betForm.submit.disabled = true
+            betForm.bet.disabled = true
             data.cards.forEach((card,index) => {
                 const cardImageInHand = document.querySelector('#card'+index+ ' img')
                 cardImageInHand.src = card.image
@@ -91,13 +96,26 @@ redraw.addEventListener('click', (e) =>{
                 imgToReplace[index].style.opacity = '100%'
             })
             redraw.disabled = true
-            draw.disabled = false
+            betForm.submit.disabled = false
+            betForm.bet.disabled = false
+            const finalCards = []
             for(image of cardImgs){
                 image.removeEventListener('mouseover', shade)
                 image.removeEventListener('mouseleave', unshade)
                 image.removeEventListener('click', selectByClick)
+                finalCards.push(image.src.split('/')[5].split('.')[0])
             }
+            console.log(findPairs(finalCards))
             })
         })
     
 })
+
+function findPairs(cardsArray){
+    cardsArray.forEach((card, index) =>{
+        const cardsArray2 = cardsArray.filter((otherCard,otherIndex)=>{
+            return index !== otherIndex
+        })
+    })
+        
+}

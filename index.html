@@ -14,13 +14,18 @@
         <div id="card3" class ="card"></div>
         <div id="card4" class ="card"></div>
     </div>
-    <button id="draw">Draw</button>
-    <button id='redraw' disabled>Redraw</button>
-    <h2 id="tokens">Number of Tokens:<span>100</span></h2>
-    <form>
+    <h2 id="tokens">Number of Tokens: <span>100</span></h2>
+    <form id="bet-form">
         <label for="bet">Bet Amount:</label>
-        <input type="number" id="bet">
-        <input type="submit" value="Submit">
+        <select name="bet" id="bet-value">
+            <option value='1'>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        <input name='submit' type="submit" value="Submit">
     </form>
+    <button id='redraw' disabled>Redraw</button>
   </body>
  </html>
