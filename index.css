@@ -1,14 +1,14 @@
 #player-hand{
     display: inline-flex;
     width: 100%;
-    background-color:FF0099;
+    background-color:rgb(96, 46, 15);
     justify-content: center
 }
 .card{
     width: 18%;
     padding: 10px;
     height:100%;
-    background-color: blue;
+    background-color: darkred;
     background-clip: content-box;
 }
 .card-image {  
@@ -17,4 +17,8 @@
 }
 #game-name{
     text-align: center;
+}
+.discard{
+    text-align: center;
+    color:white
 }

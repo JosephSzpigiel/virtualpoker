@@ -1,15 +1,11 @@
 let deckId = 0
 const currentTokens = document.querySelector('#tokens span')
-console.log(currentTokens)
 let currentBet = 1
 const betForm = document.querySelector('#bet-form')
 
 const cardsDivs = document.querySelectorAll('.card')
 const draw = document.querySelector('#draw')
 const redraw = document.querySelector('#redraw')
-const discardIndicator = document.createElement('p')
-discardIndicator.className = "discard"
-discardIndicator.textContent = 'Discard'
 
 function unshade(e){
     e.target.style.opacity= '100%'
@@ -23,6 +19,9 @@ function selectByClick(e){
         e.target.style.opacity= '40%'
         e.target.removeEventListener('mouseover', shade)
         e.target.removeEventListener('mouseleave', unshade)
+        const discardIndicator = document.createElement('p')
+        discardIndicator.className = "discard"
+        discardIndicator.textContent = 'DISCARD'
         e.target.parentNode.append(discardIndicator)
     }else{
         e.target.style.opacity = '50%'
@@ -41,6 +40,10 @@ for (card of cardsDivs){
 
 betForm.addEventListener('submit',(e)=>{
     e.preventDefault()
+    try{
+        document.querySelector('#result').remove()
+    }
+    catch(err){}
     fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     .then(r => r.json())
     .then(info => {
@@ -49,7 +52,6 @@ betForm.addEventListener('submit',(e)=>{
         .then(r => r.json())
         .then(data => {
             currentBet = e.target.bet.value
-            console.log(e.target.bet.value)
             newTokens = currentTokens.textContent - currentBet
             currentTokens.textContent = newTokens
             redraw.disabled = false
@@ -79,15 +81,17 @@ redraw.addEventListener('click', (e) =>{
         if(image.style.opacity == 0.4){
             imgToReplace.push(image)
             cardsToDiscard.push(image.id)
+            image.parentNode.querySelector('.discard').remove()
         }
     }
     const cardsAsString = ''
-    for(card of cardsToDiscard)
+    for(card of cardsToDiscard){
         if(card === cardsAsString[0]){
             cardsAsString = card
         }else{
             cardsAsString+','+card
         }
+    }
     fetch(`https://deckofcardsapi.com/api/deck/${deckId}/pile/discard/add/?cards=${cardsAsString}`)
     .then(r=>r.json())
     .then(data => {
@@ -108,9 +112,30 @@ redraw.addEventListener('click', (e) =>{
                 image.removeEventListener('mouseover', shade)
                 image.removeEventListener('mouseleave', unshade)
                 image.removeEventListener('click', selectByClick)
-                finalCards.push(image.src.split('/')[5].split('.')[0])
+                finalCards.push(image.id)
             }
-            console.log(findPairs(finalCards))
+            finalCards.forEach((card,index)=>{
+                if(card === 'aceDiamonds'){
+                    finalCards[index] = 'AD'
+                }
+            })
+            let result = ''
+            const findPairResults = findPairs(finalCards)
+            if(findPairResults[0]){
+                if(findThree(findPairs(finalCards)[2],findPairs(finalCards)[1])){
+                    result = 'Three of a Kind!'
+                }else if (findPairs(findPairResults[2])[0]){
+                    result = 'Two Pair!'
+                }else{
+                    result = 'Pair!'
+                }
+            }else{
+                result = 'Better Luck Next Time!'
+            }
+            const resultElement = document.createElement('p')
+            resultElement.id = 'result'
+            resultElement.textContent = result
+            document.querySelector('body').append(resultElement)
             })
         })
     
@@ -119,21 +144,30 @@ redraw.addEventListener('click', (e) =>{
 function findPairs(cardsArray){
     let hasPairs = false
     let pairCard = ''
+    let remainingCards = ''
     cardsArray.forEach((card, index) =>{
         const cardsArray2 = cardsArray.filter((otherCard,otherIndex)=>{
             return index !== otherIndex
         })
-        console.log(cardsArray2)
-        cardsArray2.forEach((secondCard)=>{
+        cardsArray2.forEach((secondCard, secondIndex)=>{
             if((card[0] === secondCard[0])){
                 hasPairs = true
                 pairCard = card[0]
+                remainingCards = cardsArray2.filter((thirdCard,thirdIndex)=>{
+                    return secondIndex !== thirdIndex
+                })
             }
         })
     })
-    return [hasPairs, pairCard]
+    return [hasPairs, pairCard, remainingCards]
 }
 
-function findThree(cardsArray,findPairsArray){
+function findThree(remainingCards,pairCard){
     let hasThree = false
+    remainingCards.forEach((card,index)=>{
+        if((card[0]=== pairCard)){
+            hasThree = true
+        }
+    })
+    return hasThree
 }
