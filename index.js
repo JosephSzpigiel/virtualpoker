@@ -107,7 +107,7 @@ redraw.addEventListener('click', (e) =>{
             redraw.disabled = true
             betForm.submit.disabled = false
             betForm.bet.disabled = false
-            const finalCards = []
+            let finalCards = []
             for(image of cardImgs){
                 image.removeEventListener('mouseover', shade)
                 image.removeEventListener('mouseleave', unshade)
@@ -119,18 +119,46 @@ redraw.addEventListener('click', (e) =>{
                     finalCards[index] = 'AD'
                 }
             })
+
             let result = ''
             const findPairResults = findPairs(finalCards)
             if(findPairResults[0]){
-                if(findThree(findPairs(finalCards)[2],findPairs(finalCards)[1])){
-                    result = 'Three of a Kind!'
+                const cardsRemaining = findPairs(finalCards)[2]
+                const matchCard = findPairs(finalCards)[1][0]
+
+                if(findThree(cardsRemaining,matchCard)[0]){
+                    if(findThree(findThree(cardsRemaining,matchCard)[2],matchCard)[0]){
+                        result = 'Four of a Kind!'
+                    }else if(findPairs(findThree(cardsRemaining,matchCard)[2])[0]){
+                        result = 'Full House!'
+                    }else{
+                        result = 'Three of a Kind!'
+                    }
                 }else if (findPairs(findPairResults[2])[0]){
                     result = 'Two Pair!'
                 }else{
-                    result = 'Pair!'
+                    if(Number.isInteger(parseInt(matchCard))){
+                        result = 'Better Luck Next Time!'
+                    }else{
+                        result = 'Jacks or Better!'
+                    }
                 }
             }else{
-                result = 'Better Luck Next Time!'
+                if(findStraight(finalCards)[0]){
+                    if(findFlush(finalCards)){
+                        if(findStraight(finalCards)[1]){
+                            result = 'ROYAL FLUSH!!'
+                        }else{
+                            result = 'Straight Flush!'
+                        }
+                    }else{
+                        result = 'Straight!'
+                    }
+                }else if(findFlush(finalCards)){
+                    result = 'Flush!'
+                }else{
+                    result = 'Better Luck Next Time!'
+                }
             }
             const resultElement = document.createElement('p')
             resultElement.id = 'result'
@@ -164,10 +192,86 @@ function findPairs(cardsArray){
 
 function findThree(remainingCards,pairCard){
     let hasThree = false
+    let finalRemainingCards = []
     remainingCards.forEach((card,index)=>{
         if((card[0]=== pairCard)){
             hasThree = true
+            finalRemainingCards = remainingCards.filter((remainingCard,remainingIndex)=>{
+                return index !== remainingIndex
+            })
         }
     })
-    return hasThree
+    return [hasThree, pairCard, finalRemainingCards]
+}
+
+function findFlush(cardsArray){
+    let isFlush = true
+    const toCheck = cardsArray[0][1]
+    for(card of cardsArray){
+        if(card[1] !== toCheck){
+            isFlush = false
+            break
+        }
+    }
+    return isFlush
+}
+
+function findStraight(cardsArray){
+    let isStraight = false
+    let isRoyal = false
+    const valuesArray = cardsArray.map(card => card[0])
+    const intValues = []
+    let intValuesConsecutive = true
+    const strValues = []
+    for(value of valuesArray){
+        if(Number.isInteger(parseInt(value))){
+            if(parseInt(value) === 0){
+                intValues.push(10)
+            }else{
+                intValues.push(parseInt(value))
+            }
+        }else{
+            strValues.push(value)
+        }
+    }
+    intValues.sort((a, b) => a - b)
+    console.log(intValues)
+    strValues.sort()
+    console.log(strValues)
+    intValues.forEach((value, index)=>{
+        if(index === (intValues.length - 1)){
+        }else if((value + 1) !== intValues[index+1]){
+            intValuesConsecutive  = false
+        }
+    })
+    console.log(intValuesConsecutive)
+    if(intValuesConsecutive === true){
+        if(intValues.length === 5){
+            isStraight = true
+        }else if(intValues[0] === 2){
+            if(strValues[0] === 'A'){
+                isStraight = true
+            }
+        }else if(intValues[0] === 7){
+            if(strValues[0] === 'J'){
+                isStraight = true
+            }
+        }else if(intValues[0] === 8){
+            if(strValues[0] === 'J' && strValues[1] === 'Q'){
+                isStraight = true
+            }
+        }else if(intValues[0] === 9){
+            if((strValues[0] === 'J') && (strValues[1] === 'K') && (strValues[2] === 'Q')){
+                isStraight = true
+            }
+        }else if(intValues[0] === 10){
+            if((strValues[0] === 'A') && (strValues[1] === 'J') && (strValues[2] === 'K') 
+            && (strValues[3] === 'Q')){
+                isStraight = true
+                isRoyal = true
+            }
+        }
+    }
+    console.log(isStraight)
+    return [isStraight, isRoyal]
 }
