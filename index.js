@@ -20,7 +20,7 @@ function gameStart(e){
     e.preventDefault()
     try{
         document.querySelector('#result').remove()
-        document.querySelector('#winnings').remove()
+        document.querySelector('#win-number').textContent = ''
     }
     catch(err){}
     fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
@@ -177,10 +177,9 @@ function endGame(e){
             resultElement.id = 'result'
             resultElement.textContent = result
             document.querySelector('#results-div').append(resultElement)
-            const winnings = document.createElement('p')
-            winnings.id = 'winnings'
-            winnings.textContent = `Win: ${won}`
-            document.querySelector('#results-div').append(winnings)
+            const winnings = document.querySelector('#winnings span')
+            winnings.id = 'win-number'
+            winnings.textContent = won
             if(currentTokens.textContent == 0){
                 error.textContent = 'Out of Tokens!'
                 betForm.submit.disabled = true
