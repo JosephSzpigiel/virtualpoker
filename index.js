@@ -42,6 +42,7 @@ betForm.addEventListener('submit',(e)=>{
     e.preventDefault()
     try{
         document.querySelector('#result').remove()
+        document.querySelector('#winnings').remove()
     }
     catch(err){}
     fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
@@ -121,6 +122,7 @@ redraw.addEventListener('click', (e) =>{
             })
 
             let result = ''
+            let baseWinnings = ''
             const findPairResults = findPairs(finalCards)
             if(findPairResults[0]){
                 const cardsRemaining = findPairs(finalCards)[2]
@@ -129,18 +131,24 @@ redraw.addEventListener('click', (e) =>{
                 if(findThree(cardsRemaining,matchCard)[0]){
                     if(findThree(findThree(cardsRemaining,matchCard)[2],matchCard)[0]){
                         result = 'Four of a Kind!'
+                        baseWinnings = 25
                     }else if(findPairs(findThree(cardsRemaining,matchCard)[2])[0]){
                         result = 'Full House!'
+                        baseWinnings = 9
                     }else{
                         result = 'Three of a Kind!'
+                        baseWinnings = 3
                     }
                 }else if (findPairs(findPairResults[2])[0]){
                     result = 'Two Pair!'
+                    baseWinnings = 2
                 }else{
                     if(Number.isInteger(parseInt(matchCard))){
                         result = 'Better Luck Next Time!'
+                        baseWinnings = 0
                     }else{
                         result = 'Jacks or Better!'
+                        baseWinnings = 1
                     }
                 }
             }else{
@@ -148,22 +156,39 @@ redraw.addEventListener('click', (e) =>{
                     if(findFlush(finalCards)){
                         if(findStraight(finalCards)[1]){
                             result = 'ROYAL FLUSH!!'
+                            baseWinnings = 250
                         }else{
                             result = 'Straight Flush!'
+                            baseWinnings = 50
                         }
                     }else{
                         result = 'Straight!'
+                        baseWinnings = 4
                     }
                 }else if(findFlush(finalCards)){
                     result = 'Flush!'
+                    baseWinnings = 6
                 }else{
                     result = 'Better Luck Next Time!'
+                    baseWinnings = 0
                 }
             }
+            //Apply Winnings
+
+            let won = baseWinnings*currentBet
+            if(result === "ROYAL FLUSH!!" && currentBet === 5){
+                won === 4000
+            }
+            newTokens = parseInt(currentTokens.textContent) + won
+            currentTokens.textContent = newTokens
             const resultElement = document.createElement('p')
             resultElement.id = 'result'
             resultElement.textContent = result
             document.querySelector('body').append(resultElement)
+            const winnings = document.createElement('p')
+            winnings.id = 'winnings'
+            winnings.textContent = `Win: ${won}`
+            document.querySelector('body').append(winnings)
             })
         })
     
@@ -235,16 +260,13 @@ function findStraight(cardsArray){
         }
     }
     intValues.sort((a, b) => a - b)
-    console.log(intValues)
     strValues.sort()
-    console.log(strValues)
     intValues.forEach((value, index)=>{
         if(index === (intValues.length - 1)){
         }else if((value + 1) !== intValues[index+1]){
             intValuesConsecutive  = false
         }
     })
-    console.log(intValuesConsecutive)
     if(intValuesConsecutive === true){
         if(intValues.length === 5){
             isStraight = true
@@ -272,6 +294,5 @@ function findStraight(cardsArray){
             }
         }
     }
-    console.log(isStraight)
     return [isStraight, isRoyal]
 }
