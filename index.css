@@ -1,13 +1,17 @@
 #player-hand{
     display: inline-flex;
     width: 100%;
+    height: 400px;
     background-color:rgb(96, 46, 15);
     justify-content: center
 }
 .card{
-    width: 18%;
+    max-width: 226px;
     padding: 10px;
-    height:100%;
+    width: auto;
+    height: auto;
+    aspect-ratio: auto;
+    max-height: 314px;
     background-color: darkred;
     background-clip: content-box;
 }
