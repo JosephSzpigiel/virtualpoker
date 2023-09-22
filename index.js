@@ -2,6 +2,7 @@ let deckId = 0
 const currentTokens = document.querySelector('#tokens span')
 let currentBet = 1
 const betForm = document.querySelector('#bet-form')
+const error = document.querySelector('#error')
 
 const cardsDivs = document.querySelectorAll('.card')
 const draw = document.querySelector('#draw')
@@ -54,6 +55,10 @@ betForm.addEventListener('submit',(e)=>{
         .then(data => {
             currentBet = e.target.bet.value
             newTokens = currentTokens.textContent - currentBet
+            if (newTokens < 0){
+                error.textContent = 'Not Enough Tokens!'
+            }else{
+            error.textContent = ''
             currentTokens.textContent = newTokens
             redraw.disabled = false
             betForm.submit.disabled = true
@@ -66,7 +71,7 @@ betForm.addEventListener('submit',(e)=>{
                 cardImageInHand.addEventListener('mouseover', shade)
                 cardImageInHand.addEventListener('mouseleave', unshade)
                 cardImageInHand.addEventListener('click', selectByClick)
-            })
+            })}
             }        
         )})
 })
@@ -184,11 +189,15 @@ redraw.addEventListener('click', (e) =>{
             const resultElement = document.createElement('p')
             resultElement.id = 'result'
             resultElement.textContent = result
-            document.querySelector('body').append(resultElement)
+            document.querySelector('#results-div').append(resultElement)
             const winnings = document.createElement('p')
             winnings.id = 'winnings'
             winnings.textContent = `Win: ${won}`
-            document.querySelector('body').append(winnings)
+            document.querySelector('#results-div').append(winnings)
+            if(currentTokens.textContent == 0){
+                error.textContent = 'Out of Tokens!'
+                betForm.submit.disabled = true
+            }
             })
         })
     
