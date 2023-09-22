@@ -126,6 +126,9 @@ redraw.addEventListener('click', (e) =>{
                 }
             })
 
+            // forTesting
+            //finalCards = ['AD','AH','5C','5H','5D']
+
             let result = ''
             let baseWinnings = ''
             const findPairResults = findPairs(finalCards)
@@ -145,8 +148,13 @@ redraw.addEventListener('click', (e) =>{
                         baseWinnings = 3
                     }
                 }else if (findPairs(findPairResults[2])[0]){
-                    result = 'Two Pair!'
-                    baseWinnings = 2
+                    if (findThree(findPairs(findPairResults[2])[2],findPairs(findPairResults[2])[1])[0]){
+                        result = 'Full House!'
+                        baseWinnings = 9
+                    }else{
+                        result = 'Two Pair!'
+                        baseWinnings = 2
+                    }
                 }else{
                     if(Number.isInteger(parseInt(matchCard))){
                         result = 'Better Luck Next Time!'
