@@ -7,92 +7,94 @@
   </head>
   <body>
     <h3 id="game-name">Video Poker</h3>
-    <table style="max-width:40%; display: flex; justify-content: center;>
-        <thead>
-            <tr id="head">
-                <th>Hand</th>
-                <th>Bet 1</th>
-                <th>Bet 2</th>
-                <th>Bet 3</th>
-                <th>Bet 4</th>
-                <th>Bet 5</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr id="royal-flush">
-                <td>Royal Flush</td>
-                <td>250</td>
-                <td>500</td>
-                <td>750</td>
-                <td>1000</td>
-                <td>4000</td>
-            </tr>
-            <tr id="straight-flush">
-                <td>Straight Flush</td>
-                <td>50</td>
-                <td>100</td>
-                <td>150</td>
-                <td>200</td>
-                <td>250</td>
-            </tr>
-            <tr id="four-of-a-kind">
-                <td>Four of a Kind</td>
-                <td>25</td>
-                <td>50</td>
-                <td>75</td>
-                <td>100</td>
-                <td>125</td>
-            </tr>
-            <tr id="full-house">
-                <td>Full House</td>
-                <td>9</td>
-                <td>18</td>
-                <td>27</td>
-                <td>36</td>
-                <td>45</td>
-            </tr>
-            <tr id="flush">
-                <td>Flush</td>
-                <td>6</td>
-                <td>12</td>
-                <td>18</td>
-                <td>24</td>
-                <td>30</td>
-            </tr>
-            <tr id="straight">
-                <td>Straight</td>
-                <td>4</td>
-                <td>8</td>
-                <td>12</td>
-                <td>16</td>
-                <td>20</td>
-            </tr>
-            <tr id="three-of-a-kind">
-                <td>Three of a Kind</td>
-                <td>3</td>
-                <td>6</td>
-                <td>9</td>
-                <td>12</td>
-                <td>15</td>
-            </tr>
-            <tr id="two-pair">
-                <td>Two Pair</td>
-                <td>2</td>
-                <td>4</td>
-                <td>6</td>
-                <td>8</td>
-                <td>10</td>
-            </tr>
-            <tr id="jacks-or-better">
-                <td>Jacks or Better</td>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="table-container" style="display: flex; justify-content: center;">
+      <table style="max-width:40%;">
+          <thead>
+              <tr id="head">
+                  <th>Hand</th>
+                  <th>Bet 1</th>
+                  <th>Bet 2</th>
+                  <th>Bet 3</th>
+                  <th>Bet 4</th>
+                  <th>Bet 5</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr id="royal-flush">
+                  <td>Royal Flush</td>
+                  <td>250</td>
+                  <td>500</td>
+                  <td>750</td>
+                  <td>1000</td>
+                  <td>4000</td>
+              </tr>
+              <tr id="straight-flush">
+                  <td>Straight Flush</td>
+                  <td>50</td>
+                  <td>100</td>
+                  <td>150</td>
+                  <td>200</td>
+                  <td>250</td>
+              </tr>
+              <tr id="four-of-a-kind">
+                  <td>Four of a Kind</td>
+                  <td>25</td>
+                  <td>50</td>
+                  <td>75</td>
+                  <td>100</td>
+                  <td>125</td>
+              </tr>
+              <tr id="full-house">
+                  <td>Full House</td>
+                  <td>9</td>
+                  <td>18</td>
+                  <td>27</td>
+                  <td>36</td>
+                  <td>45</td>
+              </tr>
+              <tr id="flush">
+                  <td>Flush</td>
+                  <td>6</td>
+                  <td>12</td>
+                  <td>18</td>
+                  <td>24</td>
+                  <td>30</td>
+              </tr>
+              <tr id="straight">
+                  <td>Straight</td>
+                  <td>4</td>
+                  <td>8</td>
+                  <td>12</td>
+                  <td>16</td>
+                  <td>20</td>
+              </tr>
+              <tr id="three-of-a-kind">
+                  <td>Three of a Kind</td>
+                  <td>3</td>
+                  <td>6</td>
+                  <td>9</td>
+                  <td>12</td>
+                  <td>15</td>
+              </tr>
+              <tr id="two-pair">
+                  <td>Two Pair</td>
+                  <td>2</td>
+                  <td>4</td>
+                  <td>6</td>
+                  <td>8</td>
+                  <td>10</td>
+              </tr>
+              <tr id="jacks-or-better">
+                  <td>Jacks or Better</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>5</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
     <br>
     <div id="player-hand">
         <div id="card0" class ="card"></div>
